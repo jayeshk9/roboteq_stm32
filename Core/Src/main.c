@@ -114,10 +114,22 @@ int main(void)
 //	  roboteq_setMotorCommand(1, 2, -500); // Reverse direction with 50% speed
 //	  HAL_Delay(2000);
 
-	  roboteq_setMotorSpeed(1, 2, 3000);  // Set motor channel 2 to 3000 RPM
-	  HAL_Delay(20000);
-	  roboteq_setMotorSpeed(1, 2, -3000); // Reverse direction at 3000 RPM
-	  HAL_Delay(20000);
+//	  roboteq_setMotorSpeed(1, 2, 3000);  // Set motor channel 2 to 3000 RPM
+//	  HAL_Delay(20000);
+//	  roboteq_setMotorSpeed(1, 2, -3000); // Reverse direction at 3000 RPM
+//	  HAL_Delay(20000);
+
+	 //POSITION MODE CLOSED
+	  roboteq_setMotorPosition(1, 2, 4096);  // Move motor channel 2 to position 10000
+	  HAL_Delay(5000);
+//	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
+//	  HAL_Delay(1000);
+
+	  roboteq_setMotorPosition(1, 2, -4096);  // Move motor channel 2 to position -5000
+	  HAL_Delay(5000);
+//	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
+//	  HAL_Delay(1000);
+
   }
   /* USER CODE END 3 */
 }

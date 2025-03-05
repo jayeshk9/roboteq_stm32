@@ -11,5 +11,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan);
 
 void roboteq_setMotorCommand(uint8_t node_id, uint8_t channel, int32_t speed);
 void roboteq_setMotorSpeed(uint8_t node_id, uint8_t channel, int32_t speed_rpm);
+void roboteq_setMotorPosition(uint8_t node_id, uint8_t channel, int32_t position);
+void roboteq_queryEncoderPosition(uint8_t node_id, uint8_t channel);
 
 #endif // ROBOTEQ_H

@@ -1,3 +1,4 @@
-../Core/Src/roboteq.c:52:6:roboteq_queryVoltage	1
-../Core/Src/roboteq.c:108:6:HAL_CAN_RxFifo0MsgPendingCallback	6
-../Core/Src/roboteq.c:129:6:roboteq_setMotorSpeed	4
+../Core/Src/roboteq.c:56:6:roboteq_queryVoltage	1
+../Core/Src/roboteq.c:163:6:HAL_CAN_RxFifo0MsgPendingCallback	10
+../Core/Src/roboteq.c:192:6:roboteq_setMotorPosition	2
+../Core/Src/roboteq.c:220:6:roboteq_queryEncoderPosition	2
