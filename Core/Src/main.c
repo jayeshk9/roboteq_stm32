@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
+#include "roboteq.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -150,9 +151,45 @@ int main(void)
 //	  roboteq_queryEncoderPosition(1, 2);
 //	  HAL_Delay(1000);
 
-	  roboteq_queryVoltage();
-	  HAL_Delay(1000);
+	  // ==== QUERY VOLTAGE ====
+//	   roboteq_queryVoltage();
+//	   HAL_Delay(2000);
 
+	  // ==== OPEN-LOOP MOTOR CONTROL (PWM DUTY CYCLE) ====
+//	   roboteq_setMotorCommand(MOTOR_LIFT, 500);  // 50% forward
+//	   HAL_Delay(3000);
+//	   roboteq_setMotorCommand(MOTOR_LIFT, -500); // 50% reverse
+//	   HAL_Delay(3000);
+//	   roboteq_setMotorCommand(MOTOR_LIFT, 0);    // Stop motor
+//	   HAL_Delay(2000);
+
+	  // ==== CLOSED-LOOP SPEED MODE ====
+//	   roboteq_setMotorSpeed(MOTOR_LIFT, 500);   // Set speed to 3000 RPM
+//	   HAL_Delay(10000);
+//	   roboteq_setMotorSpeed(MOTOR_LIFT, -500);  // Reverse direction at 3000 RPM
+//	   HAL_Delay(10000);
+//	   roboteq_setMotorSpeed(MOTOR_LIFT, 0);      // Stop motor
+//	   HAL_Delay(10000);
+
+	  // ==== CLOSED-LOOP POSITION MODE (ABSOLUTE ENCODER POSITION) ====
+//	   roboteq_setMotorPosition(MOTOR_LIFT, 5000);   // Move to encoder count 5000
+//	   HAL_Delay(3000);
+//	   roboteq_setMotorPosition(MOTOR_LIFT, -5000);  // Move to encoder count -5000
+//	   HAL_Delay(3000);
+
+	  // ==== CLOSED-LOOP POSITION MODE USING ANGLES ====
+//	   roboteq_setMotorAngle(MOTOR_LIFT, 90);   // Move to 90 degrees
+//	   HAL_Delay(3000);
+//	   roboteq_setMotorAngle(MOTOR_LIFT, 180);  // Move to -90 degrees
+//	   HAL_Delay(3000);
+//	   roboteq_setMotorAngle(MOTOR_LIFT, -90);  // Move to 180 degrees
+//	   HAL_Delay(3000);
+//	   roboteq_setMotorAngle(MOTOR_LIFT, 360);  // Full rotation
+//	   HAL_Delay(3000);
+
+	  // ==== ENCODER POSITION QUERY ====
+	   roboteq_queryEncoderPosition(MOTOR_LIFT);
+	   HAL_Delay(2000);
   }
   /* USER CODE END 3 */
 }
