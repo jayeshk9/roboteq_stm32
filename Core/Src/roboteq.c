@@ -1,6 +1,7 @@
 #include "roboteq.h"
 #include "stdio.h"
 #include "string.h"
+#include "math.h"
 
 #define ENCODER_CPR 16384  // 4096 PPR * 4 (Quadrature)
 
@@ -239,4 +240,17 @@ void roboteq_queryEncoderPosition(uint8_t node_id, uint8_t channel) {
     }
 }
 
+void roboteq_setMotorAngle(uint8_t node_id, uint8_t channel, int angle) {
+    if (angle < -360 || angle > 360) {
+        printf("[ERROR] Angle out of range! Must be between -360 and 360 degrees.\n");
+        return;
+    }
 
+    // Convert angle to encoder counts using only integers
+    int32_t encoder_counts = (angle * (4096 * 4)) / 360;  // Integer division
+
+    printf("[ANGLE TO COUNT] Angle: %d° -> Counts: %d\n", angle, encoder_counts);
+
+    // Send to motor
+    roboteq_setMotorPosition(node_id, channel, encoder_counts);
+}

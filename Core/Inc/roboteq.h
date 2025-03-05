@@ -13,5 +13,6 @@ void roboteq_setMotorCommand(uint8_t node_id, uint8_t channel, int32_t speed);
 void roboteq_setMotorSpeed(uint8_t node_id, uint8_t channel, int32_t speed_rpm);
 void roboteq_setMotorPosition(uint8_t node_id, uint8_t channel, int32_t position);
 void roboteq_queryEncoderPosition(uint8_t node_id, uint8_t channel);
+void roboteq_setMotorAngle(uint8_t node_id, uint8_t channel, int angle);
 
 #endif // ROBOTEQ_H

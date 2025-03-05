@@ -119,17 +119,36 @@ int main(void)
 //	  roboteq_setMotorSpeed(1, 2, -3000); // Reverse direction at 3000 RPM
 //	  HAL_Delay(20000);
 
-	 //POSITION MODE CLOSED
-	  roboteq_setMotorPosition(1, 2, 4096);  // Move motor channel 2 to position 10000
-	  HAL_Delay(5000);
+//	 //POSITION MODE CLOSED
+//	  roboteq_setMotorPosition(1, 2, 4096);  // Move motor channel 2 to position 10000
+//	  HAL_Delay(5000);
+////	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
+////	  HAL_Delay(1000);
+//
+//	  roboteq_setMotorPosition(1, 2, -4096);  // Move motor channel 2 to position -5000
+//	  HAL_Delay(5000);
 //	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
 //	  HAL_Delay(1000);
 
-	  roboteq_setMotorPosition(1, 2, -4096);  // Move motor channel 2 to position -5000
-	  HAL_Delay(5000);
-//	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
-//	  HAL_Delay(1000);
+	  roboteq_setMotorAngle(1, 2, 90);  // Move to 90 degrees
+	  HAL_Delay(3000);
+	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
+	  HAL_Delay(1000);
 
+//	  roboteq_setMotorAngle(1, 2, 180);  // Move to 180 degrees
+//	  HAL_Delay(3000);
+//	  roboteq_queryEncoderPosition(1, 2);
+	  HAL_Delay(1000);
+
+	  roboteq_setMotorAngle(1, 2, -90);  // Move to -90 degrees
+	  HAL_Delay(3000);
+	  roboteq_queryEncoderPosition(1, 2);
+	  HAL_Delay(1000);
+
+//	  roboteq_setMotorAngle(1, 2, 360);  // Move to 360 degrees (full rotation)
+//	  HAL_Delay(3000);
+//	  roboteq_queryEncoderPosition(1, 2);
+//	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
