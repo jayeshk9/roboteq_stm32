@@ -130,25 +130,29 @@ int main(void)
 //	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
 //	  HAL_Delay(1000);
 
-	  roboteq_setMotorAngle(1, 2, 90);  // Move to 90 degrees
-	  HAL_Delay(3000);
-	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
-	  HAL_Delay(1000);
-
-//	  roboteq_setMotorAngle(1, 2, 180);  // Move to 180 degrees
+//	  roboteq_setMotorAngle(1, 2, 90);  // Move to 90 degrees
+//	  HAL_Delay(3000);
+//	  roboteq_queryEncoderPosition(1, 2);  // Query Encoder Position
+//	  HAL_Delay(1000);
+//
+////	  roboteq_setMotorAngle(1, 2, 180);  // Move to 180 degrees
+////	  HAL_Delay(3000);
+////	  roboteq_queryEncoderPosition(1, 2);
+//	  HAL_Delay(1000);
+//
+//	  roboteq_setMotorAngle(1, 2, -90);  // Move to -90 degrees
 //	  HAL_Delay(3000);
 //	  roboteq_queryEncoderPosition(1, 2);
-	  HAL_Delay(1000);
-
-	  roboteq_setMotorAngle(1, 2, -90);  // Move to -90 degrees
-	  HAL_Delay(3000);
-	  roboteq_queryEncoderPosition(1, 2);
-	  HAL_Delay(1000);
+//	  HAL_Delay(1000);
 
 //	  roboteq_setMotorAngle(1, 2, 360);  // Move to 360 degrees (full rotation)
 //	  HAL_Delay(3000);
 //	  roboteq_queryEncoderPosition(1, 2);
 //	  HAL_Delay(1000);
+
+	  roboteq_queryVoltage();
+	  HAL_Delay(1000);
+
   }
   /* USER CODE END 3 */
 }

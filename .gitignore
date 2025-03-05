@@ -1,1 +1,53 @@
-404: Not Found
+# STM32CubeIDE Specific
+.settings/
+Debug/
+Release/
+*.launch
+*.swp
+*.bak
+*.tmp
+*.swo
+
+# Build and Compiler Files
+*.o
+*.d
+*.lst
+*.map
+*.elf
+*.axf
+*.bin
+*.hex
+*.out
+*.a
+*.so
+
+# # CubeMX Generated Code (Keep only if manually modifying)
+# *.ioc
+# *.log
+# *.cproject
+# *.project
+# *.mxproject
+# *.mxsettings
+
+# Ignore CubeMX-Generated Drivers (Keep if using manual drivers)
+Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/
+Drivers/STM32F1xx_HAL_Driver/Src/
+
+# Ignore Generated Startup and System Files (If CubeMX regenerates them)
+Core/Startup/
+Core/Src/system_stm32f1xx.c
+
+# Ignore auto-generated CubeMX configs (Uncomment if you regenerate these often)
+# Core/Inc/
+# Core/Src/
+
+# Ignore VS Code or External Editor Settings (if applicable)
+.vscode/
+*.code-workspace
+
+# Ignore Any Temporary or Backup Files
+*.bak
+*.swo
+*.swp
+*.tmp
+*.log
