@@ -1,85 +1,128 @@
-Roboteq CANOpen Motor Control Project
-Author: Your Name
-Date: March 2025
-Hardware Used:
+# Roboteq CANOpen Motor Control Library
 
-Roboteq SBL2360T Motor Controller
-STM32F103C8T6 (Blue Pill)
-SN65HVD230 CAN Bus Transceiver
-Two Motors:
-LIFT (Channel 2)
-TURN (Channel 1)
-Power Supply (24V-48V for Motor Controller)
-1️⃣ Wiring Diagram
-CAN Bus Wiring
-STM32F103 (Blue Pill)	SN65HVD230 (CAN Transceiver)	Roboteq SBL2360T
-PA11 (CAN_RX)	R (CAN RX)	CAN_H
-PA12 (CAN_TX)	D (CAN TX)	CAN_L
-GND	GND	GND
-3.3V	VCC	-
-Power and Motor Wiring
-Battery (24V-48V) → Roboteq Main Power Input
-Motor 1 (TURN) → Channel 1 on Roboteq
-Motor 2 (LIFT) → Channel 2 on Roboteq
-Encoder Feedback (if required) → Roboteq Encoder Input
-2️⃣ STM32 Configuration (CubeMX Settings)
-Peripheral	Configuration
-CAN1	Baud Rate: 500Kbps, Normal Mode
-GPIO	PA11 (CAN_RX), PA12 (CAN_TX)
-Clock	HSE ON (External Crystal 8MHz)
-NVIC	Enable CAN RX0 Interrupt
-3️⃣ CANOpen Communication Overview
-Standard CANOpen Message Format
-ID	Data (Bytes)	Description
-0x600 + Node ID	[Command, Index LSB, Index MSB, Subindex, Data]	SDO Write
-0x580 + Node ID	[Response Data]	SDO Response
-CANOpen Object Dictionary
-Function	Index (Hex)	Subindex	Type
-Set Motor Position	0x2001	0x01	S32
-Set Motor Speed	0x2002	0x01	S32
-Set Motor Command (Open Loop)	0x2000	0x01	S32
-Read Encoder Count	0x2104	0x01	S32
-Read Voltage	0x210D	0x02	U16
-Apply Emergency Stop	0x200C	0x00	U8
-Release Emergency Stop	0x200D	0x00	U8
-4️⃣ Available Functions in roboteq.h
-Motor Control Functions
-Function	Description
-roboteq_setMotorCommand(MOTOR_LIFT, speed)	Open-loop speed (-1000 to 1000)
-roboteq_setMotorSpeed(MOTOR_LIFT, speed_rpm)	Closed-loop speed (RPM)
-roboteq_setMotorPosition(MOTOR_LIFT, position)	Absolute position (Encoder counts)
-roboteq_setMotorAngle(MOTOR_LIFT, angle)	Move motor to specific angle
-Queries
-Function	Description
-roboteq_queryVoltage()	Reads system voltage
-roboteq_queryEncoderPosition(MOTOR_LIFT)	Reads encoder position
-Emergency Stop Functions
-Function	Description
-roboteq_applyEStop(MOTOR_LIFT)	Stops the motor immediately
-roboteq_releaseEStop()	Releases emergency stop
-5️⃣ How to Test the Library
-Flash STM32 with the provided main.c and roboteq.c.
-Comment/Uncomment functions in main.c to test one feature at a time.
-Ensure Roboteq is in the correct mode before testing:
-Open Loop Mode: roboteq_setMotorCommand()
-Closed Loop Speed Mode: roboteq_setMotorSpeed()
-Closed Loop Position Mode: roboteq_setMotorPosition()
-Use a CAN Analyzer to monitor messages.
-Check Serial Debug Output for errors or confirmations.
-6️⃣ Common Issues & Solutions
-Issue	Possible Cause	Solution
-No CAN communication	CAN wiring issue	Check TX/RX connections, ensure 120Ω termination resistor is present
-Motor doesn’t respond to commands	Incorrect mode configured	Set controller to Open/Closed loop mode based on function
-Encoder values not updating	Wrong object dictionary index	Ensure 0x2104 is correct for encoder queries
-E-Stop doesn’t work	Incorrect subindex	Use 0x200C for apply, 0x200D for release
-Voltage query returns 0	Wrong subindex	Try 0x210D, 0x02
-7️⃣ Future Improvements
-✅ Implement watchdog for error handling
-✅ Expand support for additional CANOpen PDOs
-✅ Integrate encoder-based PID control
+## 📖 Overview
+This project provides a **robust, structured, and modular library** for controlling **Roboteq SBL2360T** motor controllers over **CANOpen** using an **STM32F103C8T6 (Blue Pill)** microcontroller.  
+It supports **two motors**:
+- **LIFT** (Channel 2)
+- **TURN** (Channel 1)  
 
-8️⃣ Final Notes
-Double-check wiring and termination resistors for CAN communication stability.
-Set correct control modes before testing motor functions.
-Use a CAN Bus Analyzer to debug communication issues.
-Test each function separately to isolate issues.
+The library implements **position control, speed control, open-loop control, emergency stop handling, and real-time feedback via CANOpen**.
+
+---
+
+## 🛠️ **Wiring & Hardware Setup**
+### **🖥️ Required Components**
+| Component             | Quantity | Purpose |
+|----------------------|----------|---------|
+| STM32F103C8T6 (Blue Pill) | 1  | Microcontroller for CAN Communication |
+| ST-LINK V2 | 1  | STM32 Debugging |
+| Roboteq SBL2360T | 1  | Motor Controller |
+| SN65HVD230 CAN Transceiver | 1 | Converts STM32 CAN to Differential CAN Bus |
+| 24-48V Power Supply | 1 | Powers the motors |
+| Brushed/BLDC Motors | 2 | One for LIFT, one for TURN |
+
+### **🔌 Wiring Diagram**
+| STM32 (Blue Pill)  | SN65HVD230 CAN Transceiver | Roboteq SBL2360T | ST-Link V2 |
+|--------------------|--------------------------|------------------|--------------|
+| **PA12 (CAN_TX)**  | TX                       | CANH             | -            |
+| **PA11 (CAN_RX)**  | RX                       | CANL             | -   |
+| **3.3V**           | VCC                      | -                | 3.3V    |
+| **GND**            | GND                      | GND              | GND    |
+| **PB3**            | -                      | -              | SWO    |
+| **SWCLK**           | -                      | -                | SWCLK    |
+| **SWDIO**            | -                      | -              | SWDIO    |
+
+Motor Wiring and setup instructions - https://docs.google.com/document/d/1Llj52syTjyN0EF2rgQW3TEIN6TNUVU3SYv9_LhJtZhs/edit?usp=sharing
+
+⚠ **Important Note:** Ensure STM32 **3.3V logic level** is compatible with the CAN transceiver.
+
+---
+
+<!-- ## ⚙️ **Controller Configuration (Roboteq)**
+### **📌 General Settings**
+| Setting | Value | Notes |
+|---------|-------|-------|
+| **CAN Mode** | **CANOpen** | Ensures compatibility with SDO/PDO |
+| **Node ID** | **1** | This is fixed in our library |
+| **CAN Baud Rate** | **500 kbit/s** | Recommended for stable communication |
+| **Motor 1 (TURN) Mode** | Open-loop / Closed-loop | Change as needed |
+| **Motor 2 (LIFT) Mode** | Open-loop / Closed-loop | Change as needed | -->
+
+### **📌 How to Configure**
+1. Open **Roborun+ Utility**.
+2. Navigate to **CAN Configuration**.
+3. Set **CAN Mode** to **CANOpen**.
+4. Set **Node ID** to `1`.
+5. Set **Baud Rate** to `125 kbit/s`.
+6. Configure each motor for **Open-loop (PWM) or Closed-loop (Position/Speed)**.
+7. **Save & Apply** settings before testing.
+
+---
+
+## 📜 **Library Features**
+### **✅ Motor Control**
+| Function | Description |
+|----------|-------------|
+| `roboteq_setMotorCommand(MOTOR_TURN, speed);` | Open-loop control (-1000 to 1000) |
+| `roboteq_setMotorSpeed(MOTOR_LIFT, rpm);` | Closed-loop speed control (-65535 to 65535 RPM) |
+| `roboteq_setMotorPosition(MOTOR_TURN, position);` | Closed-loop absolute position control |
+| `roboteq_setMotorAngle(MOTOR_LIFT, angle);` | Position control using degrees (0° to 360°) |
+
+### **✅ Queries & Debugging**
+| Function | Description |
+|----------|-------------|
+| `roboteq_queryVoltage();` | Read system voltage |
+| `roboteq_queryEncoderPosition(MOTOR_TURN);` | Read current motor position |
+
+---
+
+## 📝 **How to Use**
+1. **Setup wiring** as shown above.
+2. **Flash firmware** onto STM32 using **STM32CubeIDE or PlatformIO**.
+3. **Uncomment functions in `main.c`** to test each feature **one by one**.
+4. **Check Serial Output** for CAN messages and debugging info.
+
+### **Example: Move Motor to 90 Degrees**
+```c
+roboteq_setMotorAngle(MOTOR_LIFT, 90);
+HAL_Delay(3000);
+roboteq_queryEncoderPosition(MOTOR_TURN);
+HAL_Delay(2000);
+```
+
+## 🖥️ **Enabling Serial Monitor in STM32CubeIDE**
+To view debug messages and CAN responses via **Serial Wire (ITM Debugging)** in **STM32CubeIDE**, follow these steps:
+
+### **🔹 Step 1: Enable ITM Debugging**
+1. Open **STM32CubeIDE**.
+2. Go to **Project Explorer** → Open your project.
+3. Open **Core > Src > main.c**.
+4. Add the following **ITM Debugging function** at the top of `main.c`:
+    ```c
+    int _write(int file, char *ptr, int len) {
+        for (int i = 0; i < len; i++) {
+            ITM_SendChar(*ptr++);
+        }
+        return len;
+    }
+    ```
+5. This redirects `printf()` to the **Serial Monitor**.
+
+### **🔹 Step 2: Enable SWO in Debug Configurations**
+1. Click **Run > Debug Configurations**.
+2. Select your project under **"GDB OpenOCD Debugging"**.
+3. Go to the **Debugger** tab.
+4. **Enable Serial Wire Viewer (SWV)** by checking:
+   - ✅ **Enable Serial Wire Viewer (SWV)**
+   - ✅ **SWO Clock: 72000000** (match with your CPU clock)
+   - ✅ **Port 0**
+5. Click **Apply** and **Debug**.
+
+### **🔹 Step 3: Open SWV Console**
+1. Start **Debugging (F11)**.
+2. Go to **"Window > Show View > SWV > SWV ITM Data Console"**.
+3. Click **Configure Trace** (gear icon).
+4. Select **Port 0** and click **Start**.
+5. You should now see `printf()` messages in **SWV Console**.
+
+🚀 Now all debug messages (e.g., CAN responses, errors, and motor status) will be displayed in **STM32CubeIDE’s SWV console!** 🎯
